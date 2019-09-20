@@ -4,6 +4,7 @@ import io.homo_efficio.scratchpad.thread.exception.runnable.ExceptionProducingRu
 
 import java.util.concurrent.CompletableFuture;
 
+import static io.homo_efficio.scratchpad.thread.exception.runner.ExecutorServiceUtils.CCC_THREAD_내에서_발생한_예외_CATCH_CCC;
 import static io.homo_efficio.scratchpad.thread.exception.runner.ExecutorServiceUtils.OOO_MAIN_THREAD_정상_종료_OOO;
 
 /**
@@ -15,12 +16,10 @@ public class CompletableFutureRunAsync {
     public static void main(String[] args) {
         CompletableFuture.runAsync(new ExceptionProducingRunnable())
                 .exceptionally(t -> {
-                    System.out.println(ExecutorServiceUtils.CCC_THREAD_내에서_발생한_예외_CATCH_CCC);
-                    try {
-                        throw t;
-                    } catch (Throwable throwable) {
-                        throw new IllegalThreadStateException(throwable.getMessage());  // 무시됨
-                    }
+                    System.err.println("예외 처리 in thread " + Thread.currentThread().getName());
+                    System.out.println(CCC_THREAD_내에서_발생한_예외_CATCH_CCC);
+                    t.printStackTrace();
+                    throw new RuntimeException("exceptionally에서 throw", t);
                 });
         System.out.println(OOO_MAIN_THREAD_정상_종료_OOO);
     }
