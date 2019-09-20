@@ -9,6 +9,8 @@ public class ExceptionProducingRunnable implements Runnable {
     public void run() {
         String simpleName = this.getClass().getSimpleName();
         System.out.println("OOO " + simpleName + " 실행 OOO");
-        if (true) throw new RuntimeException("XXXXX " + simpleName + " 예외 발생 XXXXX");
+        if (true)
+            throw new NullPointerException(
+                    "XXXXX " + simpleName + " 예외 발생 in thread [" + Thread.currentThread().getName() + "]");
     }
 }
